@@ -9,6 +9,15 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
+
+    // SQL statement to create the table if it doesn't exist
+    $sql = "CREATE TABLE IF NOT EXISTS names (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL
+    )";
+
+    // Execute the query
+    $pdo->exec($sql);
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
@@ -22,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["name"])) {
     $stmt->execute(["name" => $name]);
 
     // Redirect to prevent form resubmission
-    header("Location: index.php");
+    header("Location: names.php");
     exit();
 }
 
@@ -34,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_id"])) {
     $stmt->execute(["id" => $delete_id]);
 
     // Redirect to prevent form resubmission
-    header("Location: index.php");
+    header("Location: names.php");
     exit();
 }
 
@@ -95,6 +104,10 @@ $names = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
+    <h4>
+        <a href="../">Go Back</a>
+    </h4>
+    <p>This example is using The db container running MySQL</p>
 
     <h2>Enter a Name</h2>
     <form method="POST">

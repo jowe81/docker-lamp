@@ -7,6 +7,7 @@ services:
       - "8080:80"
     volumes:
       - ./app:/var/www/html
+      - ./db/sqlite:/var/www/html/db/sqlite/
     depends_on:
       - db
     environment:
@@ -23,7 +24,7 @@ services:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: phpdb
     volumes:
-      - ./db:/var/lib/mysql
+      - ./db/mysql:/var/lib/mysql
     restart: unless-stopped
 
 
